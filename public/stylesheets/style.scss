@@ -1,0 +1,15 @@
+//variable declaration in list form fot links only
+$a-tags: 'a, a:active, a:hover, a:visited, a:active, a:hover';
+
+body{
+  margin-top:50px;
+  margin-bottom:2em;
+      .footer-text{
+        margin-top: 7px;
+        color:white;
+        #{$a-tags} {
+          color: yellow;
+          text-decoration: none;
+        }
+    }
+  }
