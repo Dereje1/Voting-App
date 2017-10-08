@@ -1,0 +1,65 @@
+"use strict"
+import React from 'react'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux';
+import {findDOMNode} from 'react-dom';
+import {FormControl, FormGroup, Button, ControlLabel,Grid,Col,Row} from 'react-bootstrap'
+import {addPoll} from '../actions/pollactions';
+
+class PollForm extends React.Component{
+
+    constructor(props){
+      super(props)
+
+      this.handleNewPoll = this.handleNewPoll.bind(this)
+    }
+    handleNewPoll(){
+      let pTitle = findDOMNode(this.refs.title).value.trim()
+      let pOptions = findDOMNode(this.refs.options).value.split('\n')
+      pOptions = pOptions.filter(function(o){
+        return (o.trim()!=="")
+      })
+      //return option as a 2-dim array [optionname,val=0]
+      let pOptionsMapped = pOptions.map(function(p){
+        return [p,0]
+      })
+      if (!pTitle.length || !pOptions.length){return}
+      let pollObject ={}
+      pollObject._id = Math.floor(Math.random()*100)
+      pollObject.title = pTitle
+      pollObject.options = pOptionsMapped
+      this.props.addPoll(pollObject)
+    }
+    render(){
+      return(
+            <Grid>
+              <Row>
+                <Col xs={8} xsOffset={2}>
+                  <div className="text-center">
+                    <h3> Create New Poll </h3>
+                  </div>
+                  <FormGroup controlId="formControlsTitle" type="text" >
+                    <ControlLabel>Title</ControlLabel>
+                    <FormControl ref="title" placeholder="Enter Title for the Poll"/>
+                  </FormGroup>
+                  <FormGroup controlId="formControlsOptions" type="text" >
+                    <ControlLabel>Options</ControlLabel>
+                    <textarea className="form-control" rows="5" ref="options" placeholder="List options separated by new lines"></textarea>
+                  </FormGroup>
+                  <Button block bsStyle="warning" type="submit" onClick={this.handleNewPoll}>Create</Button>
+                </Col>
+              </Row>
+            </Grid>
+      )
+  }
+}
+
+function mapStateToProps(state){
+  return state
+}
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+          addPoll:addPoll
+          }, dispatch)
+}
+export default connect(mapStateToProps,mapDispatchToProps)(PollForm)

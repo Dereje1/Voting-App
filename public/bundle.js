@@ -21884,23 +21884,27 @@ var _main = __webpack_require__(398);
 
 var _main2 = _interopRequireDefault(_main);
 
+var _newpoll = __webpack_require__(539);
+
+var _newpoll2 = _interopRequireDefault(_newpoll);
+
+var _pollreducer = __webpack_require__(540);
+
+var _pollactions = __webpack_require__(541);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//import all actions and reducers here
-//import {recipeReducer} from './reducers/recipeReducers'
-//import {addRecipe,deleteRecipe,getRecipes} from './actions/recipeActions'
-
 
 //store declaration
 
-//modules for/realted with react
+
+//import all actions and reducers here
+
+
+//Import Created react components below
 var middleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default);
+//modules for/realted with react
 
-//main react component (RecipeBook)
-
-var store = (0, _redux.createStore)(function () {
-  {}
-}, middleware);
+var store = (0, _redux.createStore)(_pollreducer.pollReducer, middleware);
 
 //allows you to provide/link the store , ie. redux states to the react component
 //route declaration
@@ -21910,7 +21914,11 @@ var Routes = _react2.default.createElement(
   _react2.default.createElement(
     _reactRouter.Router,
     { history: _reactRouter.browserHistory },
-    _react2.default.createElement(_reactRouter.Route, { path: '/', component: _main2.default })
+    _react2.default.createElement(
+      _reactRouter.Route,
+      { path: '/', component: _main2.default },
+      _react2.default.createElement(_reactRouter.Route, { path: '/newpoll', component: _newpoll2.default })
+    )
   )
 );
 
@@ -36751,6 +36759,11 @@ var Menu = function (_React$Component) {
             { pullRight: true },
             _react2.default.createElement(
               _reactBootstrap.NavItem,
+              { eventKey: 1, href: '/newpoll' },
+              'New Poll'
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.NavItem,
               { eventKey: 1, href: '/' },
               'ADMIN'
             )
@@ -48143,6 +48156,185 @@ var Footer = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Footer;
+
+/***/ }),
+/* 539 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(359);
+
+var _redux = __webpack_require__(147);
+
+var _reactDom = __webpack_require__(23);
+
+var _reactBootstrap = __webpack_require__(400);
+
+var _pollactions = __webpack_require__(541);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PollForm = function (_React$Component) {
+  _inherits(PollForm, _React$Component);
+
+  function PollForm(props) {
+    _classCallCheck(this, PollForm);
+
+    var _this = _possibleConstructorReturn(this, (PollForm.__proto__ || Object.getPrototypeOf(PollForm)).call(this, props));
+
+    _this.handleNewPoll = _this.handleNewPoll.bind(_this);
+    return _this;
+  }
+
+  _createClass(PollForm, [{
+    key: 'handleNewPoll',
+    value: function handleNewPoll() {
+      var pTitle = (0, _reactDom.findDOMNode)(this.refs.title).value.trim();
+      var pOptions = (0, _reactDom.findDOMNode)(this.refs.options).value.split('\n');
+      pOptions = pOptions.filter(function (o) {
+        return o.trim() !== "";
+      });
+      //return option as a 2-dim array [optionname,val=0]
+      var pOptionsMapped = pOptions.map(function (p) {
+        return [p, 0];
+      });
+      if (!pTitle.length || !pOptions.length) {
+        return;
+      }
+      var pollObject = {};
+      pollObject._id = Math.floor(Math.random() * 100);
+      pollObject.title = pTitle;
+      pollObject.options = pOptionsMapped;
+      this.props.addPoll(pollObject);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactBootstrap.Grid,
+        null,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 8, xsOffset: 2 },
+            _react2.default.createElement(
+              'div',
+              { className: 'text-center' },
+              _react2.default.createElement(
+                'h3',
+                null,
+                ' Create New Poll '
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.FormGroup,
+              { controlId: 'formControlsTitle', type: 'text' },
+              _react2.default.createElement(
+                _reactBootstrap.ControlLabel,
+                null,
+                'Title'
+              ),
+              _react2.default.createElement(_reactBootstrap.FormControl, { ref: 'title', placeholder: 'Enter Title for the Poll' })
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.FormGroup,
+              { controlId: 'formControlsOptions', type: 'text' },
+              _react2.default.createElement(
+                _reactBootstrap.ControlLabel,
+                null,
+                'Options'
+              ),
+              _react2.default.createElement('textarea', { className: 'form-control', rows: '5', ref: 'options', placeholder: 'List options separated by new lines' })
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Button,
+              { block: true, bsStyle: 'warning', type: 'submit', onClick: this.handleNewPoll },
+              'Create'
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return PollForm;
+}(_react2.default.Component);
+
+function mapStateToProps(state) {
+  return state;
+}
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    addPoll: _pollactions.addPoll
+  }, dispatch);
+}
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PollForm);
+
+/***/ }),
+/* 540 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.pollReducer = pollReducer;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function pollReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { polls: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case "ADD_POLL":
+      //must redeclare everything as brand new!!
+      var allPolls = [].concat(_toConsumableArray(state.polls));
+      return { polls: [].concat(_toConsumableArray(allPolls), [action.payload]) };
+      break;
+  }
+  return state;
+}
+
+/***/ }),
+/* 541 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addPoll = addPoll;
+function addPoll(pollObject) {
+  return {
+    type: "ADD_POLL",
+    payload: pollObject
+  };
+}
 
 /***/ })
 /******/ ]);
