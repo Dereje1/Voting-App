@@ -12,8 +12,56 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //APIs Start
-app.get('/',function(req,res){
-  res.json({})
+var mongoose = require('mongoose')
+mongoose.connect("mongodb://localhost:27017/votingapp")
+var Polls = require('./models/polls')
+
+//Add New Poll//
+app.post('/polls', function(req,res){
+  var pollAdd = req.body;
+  //console.log(recipe)
+  Polls.create(pollAdd,function(err,poll){
+    if(err){
+      throw err;
+    }
+    res.json(poll)
+  })
+})
+//Get all Polls
+app.get('/polls', function(req,res){
+  Polls.find(function(err,poll){
+    if(err){
+      throw err;
+    }
+    res.json(poll)
+  })
+})
+//Delete polls
+app.delete('/polls/:_id', function(req,res){
+  var query = {_id: req.params._id};
+  Polls.remove(query, function(err, poll){
+    if(err){
+    throw err;
+    }
+    res.json(poll);
+  })
+})
+
+//update Recipes from db
+app.put('/polls/:_id', function(req, res){
+   var pollToUpdate = req.body;
+   var pollID = req.params._id;
+   // if the field doesn't exist $set will set a new field
+   //change to findByIdAndUpdate to make it congruent with delete
+   var update = { '$set': {options: pollToUpdate.options}};
+   // When true returns the updated document
+   var modified = {new: true};
+   Polls.findByIdAndUpdate(pollID, update, modified, function(err, poll){
+       if(err){
+         throw err;
+       }
+       res.json(poll);
+   })
 })
 //APIs end
 
