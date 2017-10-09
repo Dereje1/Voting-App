@@ -25,7 +25,6 @@ class PollForm extends React.Component{
       })
       if (!pTitle.length || !pOptions.length){return}
       let pollObject ={}
-      pollObject._id = Math.floor(Math.random()*100)
       pollObject.title = pTitle
       pollObject.options = pOptionsMapped
       this.props.addPoll(pollObject)

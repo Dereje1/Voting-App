@@ -10,16 +10,18 @@ import thunk from 'redux-thunk';
 
 //Import Created react components below
 import Main from './main'
+import Home from './components/home'
 import PollForm from './components/newpoll'
+import Display from './components/display'
 
 //import all actions and reducers here
-import {pollReducer} from './reducers/pollreducer'
+import reducers from './reducers/index'
 import {addPoll} from './actions/pollactions'
 
 
 //store declaration
 const middleware = applyMiddleware(thunk,logger)
-const store = createStore(pollReducer,middleware)
+const store = createStore(reducers,middleware)
 
 
 //allows you to provide/link the store , ie. redux states to the react component
@@ -28,7 +30,9 @@ const Routes = (
 <Provider store={store}>
   <Router history={browserHistory}>
     <Route path="/" component={Main}>
+    <IndexRoute component={Home}/>
     <Route path="/newpoll" component={PollForm}/>
+    <Route path="/display" component={Display}/>
     </Route>
   </Router>
 </Provider>
