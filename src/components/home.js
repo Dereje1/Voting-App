@@ -3,8 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {Grid,Col,Row,ListGroup,ListGroupItem} from 'react-bootstrap'
-import {getPolls,setActivePoll} from '../actions/pollactions';
-import {Router, Route, IndexRoute,browserHistory} from 'react-router';
+import {getPolls} from '../actions/pollactions';
 
 class Home extends React.Component{
   constructor(props){
@@ -17,11 +16,8 @@ class Home extends React.Component{
     this.props.getPolls()
   }
   goToPoll(poll){
-    console.log(poll + " Just got clicked")
-    this.props.setActivePoll({
-      active: poll
-    })
-    browserHistory.push('/display');
+    localStorage.setItem('activePoll', JSON.stringify(poll));
+    this.props.router.push('/display');
   }
 
   buildPolls(){
@@ -30,7 +26,7 @@ class Home extends React.Component{
         return acc+curr[1]
       },0)
       return(
-        <ListGroupItem key={pollsObj._id} header={pollsObj.title} onClick={()=>this.goToPoll(pollsObj._id)}>Total Votes: {totalVotes} </ListGroupItem>
+        <ListGroupItem key={pollsObj._id} header={pollsObj.title} onClick={()=>this.goToPoll(pollsObj)}>Total Votes: {totalVotes} </ListGroupItem>
       )
     })
     return pollsList
@@ -53,8 +49,7 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-          getPolls:getPolls,
-          setActivePoll:setActivePoll
+          getPolls:getPolls
           }, dispatch)
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Home)

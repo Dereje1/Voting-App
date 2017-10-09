@@ -15,7 +15,6 @@ app.use(cookieParser());
 var mongoose = require('mongoose')
 mongoose.connect("mongodb://localhost:27017/votingapp")
 var Polls = require('./models/polls')
-var ActivePoll = require('./models/active')
 
 //Add New Poll//
 app.post('/polls', function(req,res){
@@ -58,7 +57,7 @@ app.delete('/polls/:_id', function(req,res){
   })
 })
 
-//update Recipes from db
+//update polls from db
 app.put('/polls/:_id', function(req, res){
    var pollToUpdate = req.body;
    var pollID = req.params._id;
@@ -75,19 +74,6 @@ app.put('/polls/:_id', function(req, res){
    })
 })
 
-//set active poll
-app.post('/active', function(req,res){
-  var activeAdd = req.body;
-  //console.log(recipe)
-  ActivePoll.remove({},function(err,deleted){
-      ActivePoll.create(activeAdd,function(err,act){
-        if(err){
-          throw err;
-        }
-        res.json(act)
-      })
-  })
-})
 //APIs end
 
 app.listen(3001,function(err){

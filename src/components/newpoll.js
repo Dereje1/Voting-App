@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {findDOMNode} from 'react-dom';
 import {FormControl, FormGroup, Button, ControlLabel,Grid,Col,Row} from 'react-bootstrap'
-import {addPoll} from '../actions/pollactions';
+import {getPolls,addPoll} from '../actions/pollactions';
 
 class PollForm extends React.Component{
 
@@ -12,6 +12,9 @@ class PollForm extends React.Component{
       super(props)
 
       this.handleNewPoll = this.handleNewPoll.bind(this)
+    }
+    componentDidMount(){
+      this.props.getPolls()
     }
     handleNewPoll(){
       let pTitle = findDOMNode(this.refs.title).value.trim()
@@ -28,6 +31,7 @@ class PollForm extends React.Component{
       pollObject.title = pTitle
       pollObject.options = pOptionsMapped
       this.props.addPoll(pollObject)
+      this.props.router.push('/');
     }
     render(){
       return(
@@ -58,6 +62,7 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
+          getPolls:getPolls,
           addPoll:addPoll
           }, dispatch)
 }
