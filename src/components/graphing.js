@@ -1,5 +1,10 @@
 "use strict"
 import React from 'react'
+import * as d3 from "d3";
+import Pie from './piechart';
+// unfinished/src/components/scatter-plot.jsx
+//import React        from 'react';
+
 
 class Graph extends React.Component{
 
@@ -11,8 +16,9 @@ class Graph extends React.Component{
   }
   render(){
 
-    return(<div>{this.tempresults(this.props.data)}</div>)
+    return(<Pie data={this.props.data}/>)
   }
 }
+
 
 export default Graph
