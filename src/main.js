@@ -8,7 +8,6 @@ class Main extends React.Component{
         <div>
           <Menu/>
             {this.props.children}
-          <Footer />
         </div>
       )
     }

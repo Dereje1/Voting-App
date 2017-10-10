@@ -5,7 +5,8 @@ import {bindActionCreators} from 'redux';
 import {Grid,Col,Row,Button} from 'react-bootstrap'
 import {deletePoll,updatePoll} from '../actions/pollactions';
 import PollOptions from './optiondisplay'
-import Graph from './graphing'
+import Pie from './d3-graphing/piechart';
+import BarChart from './d3-graphing/barchart';
 
 class Display extends React.Component{
   constructor(props){
@@ -68,8 +69,8 @@ class Display extends React.Component{
               >Vote For {this.state.selectedOption} </Button>
             </Col>
             <Col xs={12} md={6}>
-              <Graph data={this.state.activePoll.options}/>
-              <Button className="btn btn-danger" onClick={()=>this.handelePollDelete()}>Delete</Button>
+              <Pie data={this.state.activePoll.options}/>
+              <Button block className="btn btn-danger" onClick={()=>this.handelePollDelete()}>Delete Poll</Button>
             </Col>
           </Row>
         </Grid>
