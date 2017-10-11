@@ -23,4 +23,5 @@ yarn-error.log*
 #local mongo db
 /data
 
-/config
+#Env vars etc..
+/PRIVATE
