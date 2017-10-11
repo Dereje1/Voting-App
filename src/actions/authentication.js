@@ -17,7 +17,10 @@ export function getUser(){
           dispatch(
               {
                 type:"GET_USER_STATUS",
-                payload:response.request.response
+                payload:{
+                          full: response.request.response,
+                          username: JSON.parse(response.request.response).user.twitter.username
+                }
               }
             )
         }

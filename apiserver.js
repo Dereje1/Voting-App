@@ -63,7 +63,7 @@ app.put('/polls/:_id', function(req, res){
    var pollID = req.params._id;
    // if the field doesn't exist $set will set a new field
    //change to findByIdAndUpdate to make it congruent with delete
-   var update = { '$set': {options: pollToUpdate.options}};
+   var update = { '$set': {options: pollToUpdate.options, voted: pollToUpdate.voted}};
    // When true returns the updated document
    var modified = {new: true};
    Polls.findByIdAndUpdate(pollID, update, modified, function(err, poll){

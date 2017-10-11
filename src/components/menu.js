@@ -6,9 +6,8 @@ import {Nav, NavItem, Navbar, Button} from 'react-bootstrap';
 class Menu extends React.Component{
 
   conditionalNav(){
-    if(typeof(this.props.user.user)=='string'){//the way response comes of user is in string I can change this to JSON response in the future
-      let username = JSON.parse(this.props.user.user).user.twitter.username
-      return(<NavItem href="/logout">Logout @ {username}</NavItem>)
+    if(this.props.user.user){//the way response comes of user is in string I can change this to JSON response in the future
+      return(<NavItem href="/logout">Logout @ {this.props.user.user.username}</NavItem>)
     }
     else{
       return (<NavItem href="/auth/twitter">Sign In With Twitter</NavItem>)
@@ -27,7 +26,7 @@ class Menu extends React.Component{
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="/">About</NavItem>
+            <NavItem eventKey={1} href="/test">About</NavItem>
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>

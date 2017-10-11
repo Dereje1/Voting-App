@@ -26,7 +26,7 @@ class Home extends React.Component{
         return acc+curr[1]
       },0)
       return(
-        <ListGroupItem key={pollsObj._id} header={pollsObj.title} onClick={()=>this.goToPoll(pollsObj)}>Total Votes: {totalVotes} </ListGroupItem>
+        <ListGroupItem key={pollsObj._id} header={pollsObj.title} onClick={()=>this.goToPoll(pollsObj)}>Created: @{pollsObj.created} , Total Votes: {totalVotes} </ListGroupItem>
       )
     })
     return pollsList

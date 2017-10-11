@@ -3,6 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {Grid,Col,Row,Button} from 'react-bootstrap'
+import axios from 'axios'
 import {deletePoll,updatePoll} from '../actions/pollactions';
 import PollOptions from './optiondisplay'
 import Pie from './d3-graphing/piechart';
@@ -13,16 +14,46 @@ class Display extends React.Component{
     super(props)
     this.state={
       selectedOption:"Choose an Option",
-      activePoll:""
+      activePoll:"",
+      hasVoted:false,
+      ip:""
     }
   }
   componentDidMount(){
-    this.setState({
-      activePoll: JSON.parse(localStorage.getItem('activePoll'))
-    })
+    let pollObject = JSON.parse(localStorage.getItem('activePoll'))
+    axios.get("https://freegeoip.net/json/")
+      .then(function(response){
+        let currentIP = response.data.ip
+        if(pollObject.voted.includes(currentIP)){
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          })
+        }
+        else if(pollObject.voted.includes(this.props.user.user.username)){//username has voted
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          })
+        }
+        else{
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: false,
+            ip: currentIP
+          })
+        }
+      }.bind(this))
+      .catch(function(err){//if unable to get ip data
+        this.setState({
+          activePoll: pollObject,
+          hasVoted: false,
+        })
+      }.bind(this))
   }
   processVote(){
     //console.log("Ready to Process Vote for " , this.state.activePoll)
+    if(this.state.hasVoted){return;}
     let stateCopy = JSON.parse(JSON.stringify(this.state.activePoll))
 
     let indexOfOption = stateCopy.options.findIndex((option)=>{
@@ -30,13 +61,17 @@ class Display extends React.Component{
     })
     if(indexOfOption===-1){return}
     stateCopy.options[indexOfOption][1]++
+    stateCopy.voted.push(this.state.ip)
+    if(this.props.user.user){stateCopy.voted.push(this.props.user.user.username)}
     let readyToUpdate={
       _id:this.state.activePoll._id,
-      options:stateCopy.options
+      options:stateCopy.options,
+      voted:stateCopy.voted
     }
     this.props.updatePoll(readyToUpdate)
     this.setState({
-      activePoll:stateCopy
+      activePoll:stateCopy,
+      hasVoted:true
     })
   }
   handleSelection(e){
@@ -52,6 +87,7 @@ class Display extends React.Component{
 
   render(){
     if(this.state.activePoll!=""){
+      let buttonState= (this.state.hasVoted) ? true : false
       return (
         <Grid >
           <Row className="text-center" style={{"marginTop":"25px"}}>
@@ -64,7 +100,7 @@ class Display extends React.Component{
                 comboSelection={this.state.selectedOption}
                 onSelect={this.handleSelection.bind(this)}
                 />
-              <Button block className="btn btn-primary"
+              <Button block className="btn btn-primary" disabled={buttonState}
                style={{"marginTop":"25px"}}
                onClick = {this.processVote.bind(this)}
               >Vote For {this.state.selectedOption} </Button>

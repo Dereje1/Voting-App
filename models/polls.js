@@ -2,7 +2,9 @@
 var mongoose = require('mongoose');
 var pollSchema = mongoose.Schema({
    title: String,
-   options: [[]]
+   options: [[]],
+   created: String,
+   voted: [String]
 });
 
 var Polls = mongoose.model('Polls',pollSchema);

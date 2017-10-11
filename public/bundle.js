@@ -47504,14 +47504,13 @@ var Menu = function (_React$Component) {
   _createClass(Menu, [{
     key: 'conditionalNav',
     value: function conditionalNav() {
-      if (typeof this.props.user.user == 'string') {
+      if (this.props.user.user) {
         //the way response comes of user is in string I can change this to JSON response in the future
-        var username = JSON.parse(this.props.user.user).user.twitter.username;
         return _react2.default.createElement(
           _reactBootstrap.NavItem,
           { href: '/logout' },
           'Logout @ ',
-          username
+          this.props.user.user.username
         );
       } else {
         return _react2.default.createElement(
@@ -47550,7 +47549,7 @@ var Menu = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactBootstrap.NavItem,
-              { eventKey: 1, href: '/' },
+              { eventKey: 1, href: '/test' },
               'About'
             )
           ),
@@ -58680,7 +58679,9 @@ var Home = function (_React$Component) {
           { key: pollsObj._id, header: pollsObj.title, onClick: function onClick() {
               return _this2.goToPoll(pollsObj);
             } },
-          'Total Votes: ',
+          'Created: @',
+          pollsObj.created,
+          ' , Total Votes: ',
           totalVotes,
           ' '
         );
@@ -59624,6 +59625,10 @@ var _reactBootstrap = __webpack_require__(85);
 
 var _pollactions = __webpack_require__(128);
 
+var _login = __webpack_require__(1040);
+
+var _login2 = _interopRequireDefault(_login);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -59667,58 +59672,63 @@ var PollForm = function (_React$Component) {
       var pollObject = {};
       pollObject.title = pTitle;
       pollObject.options = pOptionsMapped;
+      pollObject.created = this.props.user.user.username;
       this.props.addPoll(pollObject);
       this.props.router.push('/');
     }
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(
-        _reactBootstrap.Grid,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.Row,
+      if (this.props.user.user) {
+        return _react2.default.createElement(
+          _reactBootstrap.Grid,
           null,
           _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 8, xsOffset: 2 },
+            _reactBootstrap.Row,
+            null,
             _react2.default.createElement(
-              'div',
-              { className: 'text-center' },
+              _reactBootstrap.Col,
+              { xs: 8, xsOffset: 2 },
               _react2.default.createElement(
-                'h3',
-                null,
-                ' Create New Poll '
+                'div',
+                { className: 'text-center' },
+                _react2.default.createElement(
+                  'h3',
+                  null,
+                  ' Create New Poll '
+                )
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'formControlsTitle', type: 'text' },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Title'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, { ref: 'title', placeholder: 'Enter Title for the Poll' })
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'formControlsOptions', type: 'text' },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Options'
+                ),
+                _react2.default.createElement('textarea', { className: 'form-control', rows: '5', ref: 'options', placeholder: 'List options separated by new lines' })
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Button,
+                { block: true, bsStyle: 'warning', type: 'submit', onClick: this.handleNewPoll },
+                'Create'
               )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.FormGroup,
-              { controlId: 'formControlsTitle', type: 'text' },
-              _react2.default.createElement(
-                _reactBootstrap.ControlLabel,
-                null,
-                'Title'
-              ),
-              _react2.default.createElement(_reactBootstrap.FormControl, { ref: 'title', placeholder: 'Enter Title for the Poll' })
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.FormGroup,
-              { controlId: 'formControlsOptions', type: 'text' },
-              _react2.default.createElement(
-                _reactBootstrap.ControlLabel,
-                null,
-                'Options'
-              ),
-              _react2.default.createElement('textarea', { className: 'form-control', rows: '5', ref: 'options', placeholder: 'List options separated by new lines' })
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Button,
-              { block: true, bsStyle: 'warning', type: 'submit', onClick: this.handleNewPoll },
-              'Create'
             )
           )
-        )
-      );
+        );
+      } else {
+        return _react2.default.createElement(_login2.default, null);
+      }
     }
   }]);
 
@@ -59761,6 +59771,10 @@ var _redux = __webpack_require__(62);
 
 var _reactBootstrap = __webpack_require__(85);
 
+var _axios = __webpack_require__(720);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _pollactions = __webpack_require__(128);
 
 var _optiondisplay = __webpack_require__(741);
@@ -59793,7 +59807,9 @@ var Display = function (_React$Component) {
 
     _this.state = {
       selectedOption: "Choose an Option",
-      activePoll: ""
+      activePoll: "",
+      hasVoted: false,
+      ip: ""
     };
     return _this;
   }
@@ -59801,9 +59817,34 @@ var Display = function (_React$Component) {
   _createClass(Display, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.setState({
-        activePoll: JSON.parse(localStorage.getItem('activePoll'))
-      });
+      var pollObject = JSON.parse(localStorage.getItem('activePoll'));
+      _axios2.default.get("https://freegeoip.net/json/").then(function (response) {
+        var currentIP = response.data.ip;
+        if (pollObject.voted.includes(currentIP)) {
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          });
+        } else if (pollObject.voted.includes(this.props.user.user.username)) {
+          //username has voted
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          });
+        } else {
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: false,
+            ip: currentIP
+          });
+        }
+      }.bind(this)).catch(function (err) {
+        //if unable to get ip data
+        this.setState({
+          activePoll: pollObject,
+          hasVoted: false
+        });
+      }.bind(this));
     }
   }, {
     key: 'processVote',
@@ -59811,6 +59852,9 @@ var Display = function (_React$Component) {
       var _this2 = this;
 
       //console.log("Ready to Process Vote for " , this.state.activePoll)
+      if (this.state.hasVoted) {
+        return;
+      }
       var stateCopy = JSON.parse(JSON.stringify(this.state.activePoll));
 
       var indexOfOption = stateCopy.options.findIndex(function (option) {
@@ -59820,13 +59864,19 @@ var Display = function (_React$Component) {
         return;
       }
       stateCopy.options[indexOfOption][1]++;
+      stateCopy.voted.push(this.state.ip);
+      if (this.props.user.user) {
+        stateCopy.voted.push(this.props.user.user.username);
+      }
       var readyToUpdate = {
         _id: this.state.activePoll._id,
-        options: stateCopy.options
+        options: stateCopy.options,
+        voted: stateCopy.voted
       };
       this.props.updatePoll(readyToUpdate);
       this.setState({
-        activePoll: stateCopy
+        activePoll: stateCopy,
+        hasVoted: true
       });
     }
   }, {
@@ -59849,6 +59899,7 @@ var Display = function (_React$Component) {
       var _this3 = this;
 
       if (this.state.activePoll != "") {
+        var buttonState = this.state.hasVoted ? true : false;
         return _react2.default.createElement(
           _reactBootstrap.Grid,
           null,
@@ -59878,7 +59929,7 @@ var Display = function (_React$Component) {
               }),
               _react2.default.createElement(
                 _reactBootstrap.Button,
-                { block: true, className: 'btn btn-primary',
+                { block: true, className: 'btn btn-primary', disabled: buttonState,
                   style: { "marginTop": "25px" },
                   onClick: this.processVote.bind(this)
                 },
@@ -73364,6 +73415,12 @@ var _redux = __webpack_require__(62);
 
 var _authentication = __webpack_require__(1038);
 
+var _reactBootstrap = __webpack_require__(85);
+
+var _axios = __webpack_require__(720);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -73375,24 +73432,49 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Test = function (_React$Component) {
   _inherits(Test, _React$Component);
 
-  function Test() {
+  function Test(props) {
     _classCallCheck(this, Test);
 
-    return _possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).call(this, props));
+
+    _this.state = {
+      ip: ""
+    };
+    return _this;
   }
 
   _createClass(Test, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.getUser();
+      _axios2.default.get("https://freegeoip.net/json/").then(function (response) {
+        this.setState({
+          ip: response.data.ip
+        });
+      }.bind(this)).catch(function (err) {
+        this.setState({
+          ip: err
+        });
+      }.bind(this));
     }
   }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'h1',
+        _reactBootstrap.Grid,
         null,
-        'Testing'
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          { style: { "marginTop": "25px" } },
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 8, xsOffset: 2, className: 'text-center' },
+            _react2.default.createElement(
+              'h1',
+              null,
+              this.state.ip
+            )
+          )
+        )
       );
     }
   }]);
@@ -73439,7 +73521,10 @@ function getUser() {
       } else {
         dispatch({
           type: "GET_USER_STATUS",
-          payload: response.request.response
+          payload: {
+            full: response.request.response,
+            username: JSON.parse(response.request.response).user.twitter.username
+          }
         });
       }
     }).catch(function (err) {
@@ -73470,6 +73555,83 @@ function userStatusReducer() {
   }
   return state;
 }
+
+/***/ }),
+/* 1040 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(85);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Login = function (_React$Component) {
+  _inherits(Login, _React$Component);
+
+  function Login() {
+    _classCallCheck(this, Login);
+
+    return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
+  }
+
+  _createClass(Login, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactBootstrap.Grid,
+        null,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          { style: { "marginTop": "25px" } },
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 8, xsOffset: 2, className: 'text-center' },
+            _react2.default.createElement(
+              _reactBootstrap.Jumbotron,
+              null,
+              _react2.default.createElement(
+                'h3',
+                null,
+                'Authentication Required !'
+              ),
+              _react2.default.createElement(
+                'a',
+                { href: '/auth/twitter' },
+                _react2.default.createElement(
+                  _reactBootstrap.Button,
+                  { block: true, bsStyle: 'primary' },
+                  'Login With Twitter'
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return Login;
+}(_react2.default.Component);
+
+exports.default = Login;
 
 /***/ })
 /******/ ]);
