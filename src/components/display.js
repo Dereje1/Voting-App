@@ -64,7 +64,8 @@ class Display extends React.Component{
                 comboSelection={this.state.selectedOption}
                 onSelect={this.handleSelection.bind(this)}
                 />
-              <Button className="btn btn-primary"
+              <Button block className="btn btn-primary"
+               style={{"marginTop":"25px"}}
                onClick = {this.processVote.bind(this)}
               >Vote For {this.state.selectedOption} </Button>
             </Col>

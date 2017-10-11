@@ -50,7 +50,7 @@ class Pie extends React.Component{
 
       g.append("path")
           .attr("d", arc)
-          .style("fill", function(d) { console.log(d);return color(d.data.x); });
+          .style("fill", function(d) { return color(d.data.x); });
 
       g.append("text")
           .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })

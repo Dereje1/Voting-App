@@ -30,9 +30,9 @@ const Routes = (
 <Provider store={store}>
   <Router history={browserHistory}>
     <Route path="/" component={Main}>
-    <IndexRoute component={Home}/>
-    <Route path="/newpoll" component={PollForm}/>
-    <Route path="/display" component={Display}/>
+      <IndexRoute component={Home}/>
+      <Route path="/newpoll" component={PollForm}/>
+      <Route path="/display" component={Display}/>
     </Route>
   </Router>
 </Provider>

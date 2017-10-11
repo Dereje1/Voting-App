@@ -1,6 +1,6 @@
 "use strict"
 import React from 'react'
-import {Nav, NavItem, Navbar} from 'react-bootstrap';
+import {Nav, NavItem, Navbar, Button} from 'react-bootstrap';
 
 class Menu extends React.Component{
   render(){
@@ -19,6 +19,8 @@ class Menu extends React.Component{
           <Nav pullRight>
             <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
             <NavItem eventKey={1} href="/">Home</NavItem>
+            <Button className="btn btn-primary" style={{"marginTop":"5px"}} href="/auth/twitter">Sign In With Twitter</Button>
+            <Button className="btn btn-primary" style={{"marginTop":"5px"}} href="/logout">Logout</Button>
           </Nav>
         </Navbar.Collapse>
     </Navbar>
