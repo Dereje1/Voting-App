@@ -13,6 +13,7 @@ import Main from './main'
 import Home from './components/home'
 import PollForm from './components/newpoll'
 import Display from './components/display'
+import Test from './components/test' 
 
 //import all actions and reducers here
 import reducers from './reducers/index'
@@ -31,6 +32,7 @@ const Routes = (
   <Router history={browserHistory}>
     <Route path="/" component={Main}>
       <IndexRoute component={Home}/>
+      <Route path="/test" component={Test}/>
       <Route path="/newpoll" component={PollForm}/>
       <Route path="/display" component={Display}/>
     </Route>

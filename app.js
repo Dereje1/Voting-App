@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 
 
+
 var httpProxy = require('http-proxy');
 
 //authentication requirements
@@ -14,6 +15,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+
 
 
 var app = express();
@@ -42,7 +44,7 @@ app.use(bodyParser.json()); // get information from html forms
 // required for passport
 app.use(session(
   { secret: 'ilovescotchscotchyscotchscotch',
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),//warning in node if this is not included
     resave: true,
     saveUninitialized: true
   }
@@ -59,7 +61,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // DEFINES THE MAIN ENTRY POINT
 app.get('*', function(req, res){
-  console.log("Hello??")
+
+    console.log("Hello??")
    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
   });
 

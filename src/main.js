@@ -1,8 +1,14 @@
 "use strict"
 import React from 'react';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux';
+import {getUser} from './actions/authentication';
+
 import Menu from './components/menu'
-import Footer from './components/footer'
 class Main extends React.Component{
+  componentDidMount(){
+    this.props.getUser()
+  }
     render(){
       return (
         <div>
@@ -13,4 +19,12 @@ class Main extends React.Component{
     }
 }
 
-export default Main
+function mapStateToProps(state){
+  return state
+}
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+          getUser:getUser
+          }, dispatch)
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Main)
