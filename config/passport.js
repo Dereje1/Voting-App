@@ -7,7 +7,15 @@ var TwitterStrategy  = require('passport-twitter').Strategy;
 var User = require('../models/user');
 
 // load the auth variables
-var configAuth = require('../PRIVATE/auth');
+var configAuth = {
+
+    'twitterAuth' : {
+        'consumerKey'       : process.env.TWITTER_CONSUMER_KEY,
+        'consumerSecret'    : process.env.TWITTER_CONSUMER_SECRET,
+        'callbackURL'       : 'http://localhost:3000/auth/twitter/callback'
+    }
+
+}
 
 module.exports = function(passport) {
 
