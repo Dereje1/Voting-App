@@ -62,7 +62,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // DEFINES THE MAIN ENTRY POINT
 app.get('*', function(req, res){
 
-    console.log("Hello??")
    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
   });
 

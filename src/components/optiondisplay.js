@@ -11,11 +11,9 @@ class PollOptions extends React.Component{
       )
     })
     return(
-      <ButtonToolbar>
           <DropdownButton bsSize="large" title={this.props.comboSelection} id="dropdown-size-large" onSelect={this.props.onSelect}>
             {optionsList}
           </DropdownButton>
-      </ButtonToolbar>
     )
   }
 }

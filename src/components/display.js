@@ -2,7 +2,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
-import {Grid,Col,Row,Button} from 'react-bootstrap'
+import {Grid,Col,Row,Button,Well} from 'react-bootstrap'
 import axios from 'axios'
 import {deletePoll,updatePoll} from '../actions/pollactions';
 import PollOptions from './optiondisplay'
@@ -87,11 +87,14 @@ class Display extends React.Component{
 
   render(){
     if(this.state.activePoll!=""){
-      let buttonState= (this.state.hasVoted) ? true : false
+      let voteButtonState= (this.state.hasVoted) ? true : false
+      let deleteButtonState = (this.props.user.username === this.state.activePoll.created) ? true : false
+      let voteButtonDescription = (voteButtonState) ? "User / IP already Voted" : "Vote For " + this.state.selectedOption
+      let deleteButtonDescription = (deleteButtonState) ? "Must be an owner to Delete Poll" : "Delete Poll"
       return (
         <Grid >
           <Row className="text-center" style={{"marginTop":"25px"}}>
-            <Col xs={12}><h1>{this.state.activePoll.title}</h1></Col>
+            <Col xs={12}><Well><h1 style={{'fontFamily':'Oswald'}}>{this.state.activePoll.title}</h1></Well></Col>
           </Row>
           <Row className="text-center">
             <Col xs={12} md={6}>
@@ -100,14 +103,14 @@ class Display extends React.Component{
                 comboSelection={this.state.selectedOption}
                 onSelect={this.handleSelection.bind(this)}
                 />
-              <Button block className="btn btn-primary" disabled={buttonState}
+              <Button block className="btn btn-primary" disabled={voteButtonState}
                style={{"marginTop":"25px"}}
                onClick = {this.processVote.bind(this)}
-              >Vote For {this.state.selectedOption} </Button>
+              >{voteButtonDescription} </Button>
             </Col>
             <Col xs={12} md={6}>
               <Pie data={this.state.activePoll.options}/>
-              <Button block className="btn btn-danger" onClick={()=>this.handelePollDelete()}>Delete Poll</Button>
+              <Button block className="btn btn-danger" disabled={deleteButtonState} onClick={()=>this.handelePollDelete()}>{deleteButtonDescription}</Button>
             </Col>
           </Row>
         </Grid>

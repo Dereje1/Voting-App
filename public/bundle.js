@@ -9998,8 +9998,11 @@ function addPoll(pollObject) {
 }
 
 function getPolls() {
+  var foruser = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
   return function (dispatch) {
-    _axios2.default.get('api/polls').then(function (response) {
+    var apiPath = foruser ? "api/polls/" + foruser : "api/polls";
+    _axios2.default.get(apiPath).then(function (response) {
       dispatch({
         type: "GET_ALL_POLLS",
         payload: response.data
@@ -32661,6 +32664,10 @@ var _display = __webpack_require__(740);
 
 var _display2 = _interopRequireDefault(_display);
 
+var _mypolls = __webpack_require__(1041);
+
+var _mypolls2 = _interopRequireDefault(_mypolls);
+
 var _test = __webpack_require__(1037);
 
 var _test2 = _interopRequireDefault(_test);
@@ -32678,10 +32685,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 //import all actions and reducers here
 
-//modules for/realted with react
-var middleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default);
 
 //Import Created react components below
+var middleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, _reduxLogger2.default);
+//modules for/realted with react
 
 var store = (0, _redux.createStore)(_index2.default, middleware);
 
@@ -32697,7 +32704,7 @@ var Routes = _react2.default.createElement(
       _reactRouter.Route,
       { path: '/', component: _main2.default },
       _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
-      _react2.default.createElement(_reactRouter.Route, { path: '/test', component: _test2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: '/mypolls', component: _mypolls2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '/newpoll', component: _newpoll2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '/display', component: _display2.default })
     )
@@ -47412,6 +47419,10 @@ var _redux = __webpack_require__(62);
 
 var _authentication = __webpack_require__(1038);
 
+var _home = __webpack_require__(719);
+
+var _home2 = _interopRequireDefault(_home);
+
 var _menu = __webpack_require__(580);
 
 var _menu2 = _interopRequireDefault(_menu);
@@ -47436,6 +47447,7 @@ var Main = function (_React$Component) {
   _createClass(Main, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      console.log("CDM Mounted for Main");
       this.props.getUser();
     }
   }, {
@@ -47507,16 +47519,49 @@ var Menu = function (_React$Component) {
       if (this.props.user.user) {
         //the way response comes of user is in string I can change this to JSON response in the future
         return _react2.default.createElement(
-          _reactBootstrap.NavItem,
-          { href: '/logout' },
-          'Logout @ ',
-          this.props.user.user.username
+          _reactBootstrap.Nav,
+          { pullRight: true },
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { eventKey: 1, href: '/newpoll' },
+            'New Poll'
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { href: '/mypolls' },
+            'My Polls'
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { eventKey: 1, href: '/' },
+            'Home'
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { href: '/logout' },
+            'Logout @ ',
+            this.props.user.user.username
+          )
         );
       } else {
         return _react2.default.createElement(
-          _reactBootstrap.NavItem,
-          { href: '/auth/twitter' },
-          'Sign In With Twitter'
+          _reactBootstrap.Nav,
+          { pullRight: true },
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { eventKey: 1, href: '/newpoll' },
+            'New Poll'
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { eventKey: 1, href: '/' },
+            'Home'
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.NavItem,
+            { href: '/auth/twitter' },
+            'Sign In With Twitter'
+          )
         );
       }
     }
@@ -47553,21 +47598,7 @@ var Menu = function (_React$Component) {
               'About'
             )
           ),
-          _react2.default.createElement(
-            _reactBootstrap.Nav,
-            { pullRight: true },
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { eventKey: 1, href: '/newpoll' },
-              'New Poll'
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.NavItem,
-              { eventKey: 1, href: '/' },
-              'Home'
-            ),
-            this.conditionalNav()
-          )
+          this.conditionalNav()
         )
       );
     }
@@ -58656,7 +58687,12 @@ var Home = function (_React$Component) {
   _createClass(Home, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.props.getPolls();
+      console.log("CDM Mounted for home");
+      if (this.props.foruser) {
+        this.props.getPolls(this.props.foruser);
+      } else {
+        this.props.getPolls();
+      }
     }
   }, {
     key: 'goToPoll',
@@ -59899,7 +59935,10 @@ var Display = function (_React$Component) {
       var _this3 = this;
 
       if (this.state.activePoll != "") {
-        var buttonState = this.state.hasVoted ? true : false;
+        var voteButtonState = this.state.hasVoted ? true : false;
+        var deleteButtonState = this.props.user.username === this.state.activePoll.created ? true : false;
+        var voteButtonDescription = voteButtonState ? "User / IP already Voted" : "Vote For " + this.state.selectedOption;
+        var deleteButtonDescription = deleteButtonState ? "Must be an owner to Delete Poll" : "Delete Poll";
         return _react2.default.createElement(
           _reactBootstrap.Grid,
           null,
@@ -59910,9 +59949,13 @@ var Display = function (_React$Component) {
               _reactBootstrap.Col,
               { xs: 12 },
               _react2.default.createElement(
-                'h1',
+                _reactBootstrap.Well,
                 null,
-                this.state.activePoll.title
+                _react2.default.createElement(
+                  'h1',
+                  { style: { 'fontFamily': 'Oswald' } },
+                  this.state.activePoll.title
+                )
               )
             )
           ),
@@ -59929,12 +59972,11 @@ var Display = function (_React$Component) {
               }),
               _react2.default.createElement(
                 _reactBootstrap.Button,
-                { block: true, className: 'btn btn-primary', disabled: buttonState,
+                { block: true, className: 'btn btn-primary', disabled: voteButtonState,
                   style: { "marginTop": "25px" },
                   onClick: this.processVote.bind(this)
                 },
-                'Vote For ',
-                this.state.selectedOption,
+                voteButtonDescription,
                 ' '
               )
             ),
@@ -59944,10 +59986,10 @@ var Display = function (_React$Component) {
               _react2.default.createElement(_piechart2.default, { data: this.state.activePoll.options }),
               _react2.default.createElement(
                 _reactBootstrap.Button,
-                { block: true, className: 'btn btn-danger', onClick: function onClick() {
+                { block: true, className: 'btn btn-danger', disabled: deleteButtonState, onClick: function onClick() {
                     return _this3.handelePollDelete();
                   } },
-                'Delete Poll'
+                deleteButtonDescription
               )
             )
           )
@@ -60023,13 +60065,9 @@ var PollOptions = function (_React$Component) {
         );
       });
       return _react2.default.createElement(
-        _reactBootstrap.ButtonToolbar,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.DropdownButton,
-          { bsSize: 'large', title: this.props.comboSelection, id: 'dropdown-size-large', onSelect: this.props.onSelect },
-          optionsList
-        )
+        _reactBootstrap.DropdownButton,
+        { bsSize: 'large', title: this.props.comboSelection, id: 'dropdown-size-large', onSelect: this.props.onSelect },
+        optionsList
       );
     }
   }]);
@@ -73632,6 +73670,65 @@ var Login = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Login;
+
+/***/ }),
+/* 1041 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _home = __webpack_require__(719);
+
+var _home2 = _interopRequireDefault(_home);
+
+var _reactRedux = __webpack_require__(115);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Mypolls = function (_React$Component) {
+  _inherits(Mypolls, _React$Component);
+
+  function Mypolls() {
+    _classCallCheck(this, Mypolls);
+
+    return _possibleConstructorReturn(this, (Mypolls.__proto__ || Object.getPrototypeOf(Mypolls)).apply(this, arguments));
+  }
+
+  _createClass(Mypolls, [{
+    key: 'render',
+    value: function render() {
+      if (this.props.user.user.length !== 0) {
+        return _react2.default.createElement(_home2.default, { foruser: this.props.user.user.username });
+      } else {
+        return _react2.default.createElement('div', null);
+      }
+    }
+  }]);
+
+  return Mypolls;
+}(_react2.default.Component);
+
+function mapStateToProps(state) {
+  return state;
+}
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(Mypolls);
 
 /***/ })
 /******/ ]);

@@ -7,10 +7,23 @@ class Menu extends React.Component{
 
   conditionalNav(){
     if(this.props.user.user){//the way response comes of user is in string I can change this to JSON response in the future
-      return(<NavItem href="/logout">Logout @ {this.props.user.user.username}</NavItem>)
+      return(
+        <Nav pullRight>
+          <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
+          <NavItem href="/mypolls">My Polls</NavItem>
+          <NavItem eventKey={1} href="/">Home</NavItem>
+          <NavItem href="/logout">Logout @ {this.props.user.user.username}</NavItem>
+        </Nav>
+      )
     }
     else{
-      return (<NavItem href="/auth/twitter">Sign In With Twitter</NavItem>)
+      return (
+        <Nav pullRight>
+          <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
+          <NavItem eventKey={1} href="/">Home</NavItem>
+          <NavItem href="/auth/twitter">Sign In With Twitter</NavItem>
+        </Nav>
+      )
     }
   }
 
@@ -28,11 +41,7 @@ class Menu extends React.Component{
           <Nav>
             <NavItem eventKey={1} href="/test">About</NavItem>
           </Nav>
-          <Nav pullRight>
-            <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
-            <NavItem eventKey={1} href="/">Home</NavItem>
-            {this.conditionalNav()}
-          </Nav>
+          {this.conditionalNav()}
         </Navbar.Collapse>
     </Navbar>
     )

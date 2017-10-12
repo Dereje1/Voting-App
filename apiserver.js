@@ -37,8 +37,8 @@ app.get('/polls', function(req,res){
   })
 })
 //Get specific Poll
-app.get('/polls/:_id', function(req,res){
-  var query = {_id: req.params._id};
+app.get('/polls/:user', function(req,res){
+  var query = {created: req.params.user};
   Polls.find(query,function(err,poll){
     if(err){
       throw err;

@@ -13,7 +13,13 @@ class Home extends React.Component{
     this.goToPoll = this.goToPoll.bind(this)
   }
   componentDidMount(){
-    this.props.getPolls()
+    console.log("CDM Mounted for home")
+    if(this.props.foruser){
+      this.props.getPolls(this.props.foruser)
+    }
+    else{
+      this.props.getPolls()
+    }
   }
   goToPoll(poll){
     localStorage.setItem('activePoll', JSON.stringify(poll));
