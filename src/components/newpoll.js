@@ -18,6 +18,7 @@ class PollForm extends React.Component{
       this.props.getPolls()
     }
     handleNewPoll(){
+
       let pTitle = findDOMNode(this.refs.title).value.trim()
       let pOptions = findDOMNode(this.refs.options).value.split('\n')
       pOptions = pOptions.filter(function(o){
@@ -32,11 +33,12 @@ class PollForm extends React.Component{
       pollObject.title = pTitle
       pollObject.options = pOptionsMapped
       pollObject.created = this.props.user.user.username
+      pollObject.vote=[]
       this.props.addPoll(pollObject)
       this.props.router.push('/');
     }
     render(){
-      if(this.props.user.user){
+      if(this.props.user.user.authenticated){
         return(
               <Grid>
                 <Row>

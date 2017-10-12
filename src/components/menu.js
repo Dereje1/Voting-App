@@ -6,13 +6,13 @@ import {Nav, NavItem, Navbar, Button} from 'react-bootstrap';
 class Menu extends React.Component{
 
   conditionalNav(){
-    if(this.props.user.user){//the way response comes of user is in string I can change this to JSON response in the future
+    if(this.props.user.user.authenticated){//the way response comes of user is in string I can change this to JSON response in the future
       return(
         <Nav pullRight>
           <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
-          <NavItem href="/mypolls">My Polls</NavItem>
-          <NavItem eventKey={1} href="/">Home</NavItem>
-          <NavItem href="/logout">Logout @ {this.props.user.user.username}</NavItem>
+          <NavItem eventKey={2} href="/mypolls">My Polls</NavItem>
+          <NavItem eventKey={3} href="/">Home</NavItem>
+          <NavItem eventKey={4} href="/logout">Logout @ {this.props.user.user.username}</NavItem>
         </Nav>
       )
     }
@@ -20,8 +20,8 @@ class Menu extends React.Component{
       return (
         <Nav pullRight>
           <NavItem eventKey={1} href="/newpoll">New Poll</NavItem>
-          <NavItem eventKey={1} href="/">Home</NavItem>
-          <NavItem href="/auth/twitter">Sign In With Twitter</NavItem>
+          <NavItem eventKey={2} href="/">Home</NavItem>
+          <NavItem eventKey={3} href="/auth/twitter">Sign In With Twitter</NavItem>
         </Nav>
       )
     }

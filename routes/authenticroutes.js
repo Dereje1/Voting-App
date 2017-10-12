@@ -6,9 +6,15 @@ module.exports = function(app, passport) {
     // route for showing the profile page
 
     app.get('/profile', isLoggedIn, function(req, res) {
-        res.send({
-            user : req.user // get the user out of session and pass to template
-        });
+      let headerObject = req.headers
+      let ip = (headerObject['x-forwarded-for']||req.socket.remoteAddress).split(",")[0];
+      ip = (ip === "::1") ? "local" : ip
+      res.json({
+                authenticated: true,
+                userip: ip,
+                username: req.user.twitter.username,
+                fullData: req.user
+            });
     });
         // route for logging out
     app.get('/logout', function(req, res) {
@@ -40,5 +46,15 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.end('Not Authenticated');
+    let headerObject = req.headers
+     //the x-forwarded-for property of the header does not appear for local host so add an alternative or will
+     //error out locally on split to get the ip address the rest of the requests are common to loacl and remote
+    let ip = (headerObject['x-forwarded-for']||req.socket.remoteAddress).split(",")[0];
+    ip = (ip === "::1") ? "local" : ip
+    res.json({
+      authenticated: false,
+      userip: ip,
+      username: null,
+      fullData: null
+    });
 }

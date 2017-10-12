@@ -12,14 +12,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //APIs Start
-var mongoose = require('mongoose')
-mongoose.connect("mongodb://localhost:27017/votingapp")
+var db = require('./models/db')
 var Polls = require('./models/polls')
 
 //Add New Poll//
 app.post('/polls', function(req,res){
   var pollAdd = req.body;
-  //console.log(recipe)
   Polls.create(pollAdd,function(err,poll){
     if(err){
       throw err;

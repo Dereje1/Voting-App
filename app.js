@@ -3,9 +3,23 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 
+var app = express();
+app.use(logger('dev'));
 
+//becareful of the orders in middleware as they matter
 
 var httpProxy = require('http-proxy');
+// Set up PROXY server with the module from above
+const apiProxy = httpProxy.createProxyServer(
+  {target:"http://localhost:3001"}
+)
+//apply middleware that intercepts all requests to the /api and retrieves the resources from the prxy
+
+app.use('/api',function(req,res){
+  apiProxy.web(req,res)
+})
+
+//end proxy setup
 
 //authentication requirements
 var mongoose = require('mongoose');
@@ -18,20 +32,9 @@ var MongoStore = require('connect-mongo')(session);
 
 
 
-var app = express();
-app.use(logger('dev'));
-// Set up PROXY server with the module from above
-const apiProxy = httpProxy.createProxyServer(
-  {target:"http://localhost:3001"}
-)
-//apply middleware that intercepts all requests to the /api and retrieves the resources from the prxy
-app.use('/api',function(req,res){
-  apiProxy.web(req,res)
-})
-//end proxy setup
 
 // configuration  for authentication===============================================================
-mongoose.connect("mongodb://localhost:27017/votingapp"); // connect to our database
+var db = require('./models/db')
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -53,17 +56,20 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 // routes ======================================================================
-require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./routes/authenticroutes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 //end authentication
 
+
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 // DEFINES THE MAIN ENTRY POINT
 app.get('*', function(req, res){
 
    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
   });
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

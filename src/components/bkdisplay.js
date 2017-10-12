@@ -15,27 +15,43 @@ class Display extends React.Component{
     this.state={
       selectedOption:"Choose an Option",
       activePoll:"",
-      hasVoted:false
+      hasVoted:false,
+      ip:""
     }
   }
   componentDidMount(){
-    let pollObject = JSON.parse(localStorage.getItem('activePoll'));
-    let votedAlready;
-
-    if(pollObject.voted.includes(this.props.user.user.userip)){
-      votedAlready = true;
-    }
-    else if(pollObject.voted.includes(this.props.user.user.username)){
-      votedAlready = true;
-    }
-    else{
-      votedAlready = false;
-    }
-
-    this.setState({
-      activePoll: pollObject,
-      hasVoted: votedAlready
-    })
+    let pollObject = JSON.parse(localStorage.getItem('activePoll'))
+    axios.get("https://freegeoip.net/json/")
+      .then(function(response){
+        let currentIP = response.data.ip
+        console.log(currentIP)
+        console.log(pollObject.voted)
+        if(pollObject.voted.includes(currentIP)){
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          })
+        }
+        else if(pollObject.voted.includes(this.props.user.user.username)){//username has voted
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: true
+          })
+        }
+        else{
+          this.setState({
+            activePoll: pollObject,
+            hasVoted: false,
+            ip: currentIP
+          })
+        }
+      }.bind(this))
+      .catch(function(err){//if unable to get ip data
+        this.setState({
+          activePoll: pollObject,
+          hasVoted: false,
+        })
+      }.bind(this))
   }
   processVote(){
     //console.log("Ready to Process Vote for " , this.state.activePoll)
@@ -47,10 +63,8 @@ class Display extends React.Component{
     })
     if(indexOfOption===-1){return}
     stateCopy.options[indexOfOption][1]++
-    if(this.props.user.user.userip!=="local"){
-      stateCopy.voted.push(this.props.user.user.userip)
-    }
-    if(this.props.user.user.username){stateCopy.voted.push(this.props.user.user.username)}
+    stateCopy.voted.push(this.state.ip)
+    if(this.props.user.user){stateCopy.voted.push(this.props.user.user.username)}
     let readyToUpdate={
       _id:this.state.activePoll._id,
       options:stateCopy.options,
