@@ -12,7 +12,7 @@ var configAuth = {
     'twitterAuth' : {
       'consumerKey'       : 'bhNgWesfvxd6u0sKupmuPWbzp',
       'consumerSecret'    : 'sI2jnDlCwGKBhQABCciOu3gKXqAsfHvVR4vYDf8jDiBOeWI3wh',
-      'callbackURL'       : 'https://fcc-voting-app-dereje1.herokuapp.com/'
+      'callbackURL'       : 'https://fcc-voting-app-dereje1.herokuapp.com/auth/twitter/callback'
     }
 //http://localhost:3000/auth/twitter/callback
 }
