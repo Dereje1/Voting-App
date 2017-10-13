@@ -32827,9 +32827,9 @@ var _mypolls = __webpack_require__(1035);
 
 var _mypolls2 = _interopRequireDefault(_mypolls);
 
-var _test = __webpack_require__(1036);
+var _about = __webpack_require__(1040);
 
-var _test2 = _interopRequireDefault(_test);
+var _about2 = _interopRequireDefault(_about);
 
 var _index = __webpack_require__(1037);
 
@@ -32865,7 +32865,8 @@ var Routes = _react2.default.createElement(
       _react2.default.createElement(_reactRouter.IndexRoute, { component: _home2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '/mypolls', component: _mypolls2.default }),
       _react2.default.createElement(_reactRouter.Route, { path: '/newpoll', component: _newpoll2.default }),
-      _react2.default.createElement(_reactRouter.Route, { path: '/display', component: _display2.default })
+      _react2.default.createElement(_reactRouter.Route, { path: '/display', component: _display2.default }),
+      _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _about2.default })
     )
   )
 );
@@ -59646,7 +59647,7 @@ var Menu = function (_React$Component) {
             null,
             _react2.default.createElement(
               _reactBootstrap.NavItem,
-              { eventKey: 1, href: '/test' },
+              { eventKey: 1, href: '/about' },
               'About'
             )
           ),
@@ -73505,106 +73506,7 @@ function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Mypolls);
 
 /***/ }),
-/* 1036 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(46);
-
-var _redux = __webpack_require__(44);
-
-var _authentication = __webpack_require__(297);
-
-var _reactBootstrap = __webpack_require__(56);
-
-var _axios = __webpack_require__(118);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Test = function (_React$Component) {
-  _inherits(Test, _React$Component);
-
-  function Test(props) {
-    _classCallCheck(this, Test);
-
-    var _this = _possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).call(this, props));
-
-    _this.state = {
-      ip: ""
-    };
-    return _this;
-  }
-
-  _createClass(Test, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      _axios2.default.get("https://freegeoip.net/json/").then(function (response) {
-        this.setState({
-          ip: response.data.ip
-        });
-      }.bind(this)).catch(function (err) {
-        this.setState({
-          ip: err
-        });
-      }.bind(this));
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        _reactBootstrap.Grid,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          { style: { "marginTop": "25px" } },
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 8, xsOffset: 2, className: 'text-center' },
-            _react2.default.createElement(
-              'h1',
-              null,
-              this.state.ip
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return Test;
-}(_react2.default.Component);
-
-function mapStateToProps(state) {
-  return state;
-}
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    getUser: _authentication.getUser
-  }, dispatch);
-}
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Test);
-
-/***/ }),
+/* 1036 */,
 /* 1037 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -73707,6 +73609,196 @@ function pollReducer() {
   }
   return state;
 }
+
+/***/ }),
+/* 1040 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(56);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var About = function (_React$Component) {
+  _inherits(About, _React$Component);
+
+  function About(props) {
+    _classCallCheck(this, About);
+
+    //initialize modal state and assign params on open
+    var _this = _possibleConstructorReturn(this, (About.__proto__ || Object.getPrototypeOf(About)).call(this, props));
+
+    _this.state = {
+      show: true
+    };
+    return _this;
+  }
+
+  _createClass(About, [{
+    key: 'open',
+    value: function open() {
+      //when modal is opened note edit info coming from the props of this class as an array
+      //of the ingredients and recipe name for active recipe
+      this.setState({
+        show: true
+      });
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      //when modal is closed reset back to original state
+      this.setState({
+        show: false
+      }, this.props.router.push('/'));
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactBootstrap.Modal,
+        {
+          show: this.state.show,
+          onHide: this.close.bind(this),
+          container: this,
+          'aria-labelledby': 'contained-modal-title'
+        },
+        _react2.default.createElement(
+          _reactBootstrap.Modal.Header,
+          { closeButton: true },
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Title,
+            { id: 'contained-modal-title' },
+            'Voting App'
+          )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Modal.Body,
+          null,
+          _react2.default.createElement(
+            'h5',
+            null,
+            'Coded by ',
+            _react2.default.createElement(
+              'a',
+              { href: 'https://www.freecodecamp.com/dereje1', target: '_blank' },
+              'DGetahun'
+            ),
+            ' Using:'
+          ),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement(
+            _reactBootstrap.Table,
+            { responsive: true },
+            _react2.default.createElement(
+              'thead',
+              null,
+              _react2.default.createElement(
+                'tr',
+                null,
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Front End'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Back End'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              'tbody',
+              null,
+              _react2.default.createElement(
+                'tr',
+                null,
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  'React / Redux'
+                ),
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  ' Express / Node.js'
+                )
+              ),
+              _react2.default.createElement(
+                'tr',
+                null,
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  'D3.js'
+                ),
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  'Mongoose / Mongodb'
+                )
+              ),
+              _react2.default.createElement(
+                'tr',
+                null,
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  'Javascript'
+                ),
+                _react2.default.createElement(
+                  'td',
+                  null,
+                  'Javascript'
+                )
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Modal.Footer,
+          null,
+          _react2.default.createElement(
+            'span',
+            { className: 'pull-left' },
+            _react2.default.createElement(
+              'a',
+              { href: 'https://github.com/Dereje1/Voting-App' },
+              'Github'
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            { onClick: this.close.bind(this) },
+            'Close'
+          )
+        )
+      );
+    }
+  }]);
+
+  return About;
+}(_react2.default.Component);
+
+exports.default = About;
 
 /***/ })
 /******/ ]);

@@ -1,14 +1,12 @@
 body {
   margin-top: 50px;
-  margin-bottom: 2em;
 }
 
-body .footer-text {
-  margin-top: 7px;
-  color: white;
+body td, body th {
+  text-align: center;
 }
 
-body .footer-text a, body .footer-text a:active, body .footer-text a:hover, body .footer-text a:visited, body .footer-text a:active, body .footer-text a:hover {
+body a, body a:active, body a:hover, body a:visited, body a:active, body a:hover {
   color: yellow;
   text-decoration: none;
 }

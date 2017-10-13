@@ -39,7 +39,7 @@ class Menu extends React.Component{
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="/test">About</NavItem>
+            <NavItem eventKey={1} href="/about">About</NavItem>
           </Nav>
           {this.conditionalNav()}
         </Navbar.Collapse>

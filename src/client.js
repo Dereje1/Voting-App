@@ -14,7 +14,7 @@ import Home from './components/home'
 import PollForm from './components/newpoll'
 import Display from './components/display'
 import Mypolls from './components/mypolls'
-import Test from './components/test'
+import About from './components/about'
 
 //import all actions and reducers here
 import reducers from './reducers/index'
@@ -36,6 +36,7 @@ const Routes = (
       <Route path="/mypolls" component={Mypolls}/>
       <Route path="/newpoll" component={PollForm}/>
       <Route path="/display" component={Display}/>
+      <Route path="/about" component={About}/>
     </Route>
   </Router>
 </Provider>
