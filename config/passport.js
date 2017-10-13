@@ -10,11 +10,11 @@ var User = require('../models/user');
 var configAuth = {
 
     'twitterAuth' : {
-        'consumerKey'       : process.env.TWITTER_CONSUMER_KEY,
-        'consumerSecret'    : process.env.TWITTER_CONSUMER_SECRET,
-        'callbackURL'       : 'https://fcc-voting-app-dereje1.herokuapp.com'
+      'consumerKey'       : 'bhNgWesfvxd6u0sKupmuPWbzp',
+      'consumerSecret'    : 'sI2jnDlCwGKBhQABCciOu3gKXqAsfHvVR4vYDf8jDiBOeWI3wh',
+      'callbackURL'       : 'https://fcc-voting-app-dereje1.herokuapp.com/'
     }
-
+//http://localhost:3000/auth/twitter/callback
 }
 
 module.exports = function(passport) {
