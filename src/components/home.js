@@ -2,7 +2,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
+import {Router, Route, IndexRoute,browserHistory} from 'react-router';
 import {Grid,Col,Row,ListGroup,ListGroupItem} from 'react-bootstrap'
 import {getPolls} from '../actions/pollactions';
 
@@ -25,9 +25,8 @@ class Home extends React.Component{
     }
   }
   goToPoll(poll){
-    console.log(this.props)
-    localStorage.setItem('activePoll', JSON.stringify(poll));
-    browserHistory.push('/display');
+    //browserHistory.push('/display/?singlepoll='+poll._id);
+    browserHistory.push({ pathname: '/display', query: { singlepoll: poll._id } })
   }
 
   buildPolls(){

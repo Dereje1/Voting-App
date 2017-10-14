@@ -15,43 +15,27 @@ class Display extends React.Component{
     this.state={
       selectedOption:"Choose an Option",
       activePoll:"",
-      hasVoted:false,
-      ip:""
+      hasVoted:false
     }
   }
   componentDidMount(){
-    let pollObject = JSON.parse(localStorage.getItem('activePoll'))
-    axios.get("https://freegeoip.net/json/")
-      .then(function(response){
-        let currentIP = response.data.ip
-        console.log(currentIP)
-        console.log(pollObject.voted)
-        if(pollObject.voted.includes(currentIP)){
-          this.setState({
-            activePoll: pollObject,
-            hasVoted: true
-          })
-        }
-        else if(pollObject.voted.includes(this.props.user.user.username)){//username has voted
-          this.setState({
-            activePoll: pollObject,
-            hasVoted: true
-          })
-        }
-        else{
-          this.setState({
-            activePoll: pollObject,
-            hasVoted: false,
-            ip: currentIP
-          })
-        }
-      }.bind(this))
-      .catch(function(err){//if unable to get ip data
-        this.setState({
-          activePoll: pollObject,
-          hasVoted: false,
-        })
-      }.bind(this))
+    let pollObject = JSON.parse(localStorage.getItem('activePoll'));
+    let votedAlready;
+
+    if(pollObject.voted.includes(this.props.user.user.userip)){
+      votedAlready = true;
+    }
+    else if(pollObject.voted.includes(this.props.user.user.username)){
+      votedAlready = true;
+    }
+    else{
+      votedAlready = false;
+    }
+
+    this.setState({
+      activePoll: pollObject,
+      hasVoted: votedAlready
+    })
   }
   processVote(){
     //console.log("Ready to Process Vote for " , this.state.activePoll)
@@ -63,8 +47,10 @@ class Display extends React.Component{
     })
     if(indexOfOption===-1){return}
     stateCopy.options[indexOfOption][1]++
-    stateCopy.voted.push(this.state.ip)
-    if(this.props.user.user){stateCopy.voted.push(this.props.user.user.username)}
+    if(this.props.user.user.userip!=="local"){
+      stateCopy.voted.push(this.props.user.user.userip)
+    }
+    if(this.props.user.user.username){stateCopy.voted.push(this.props.user.user.username)}
     let readyToUpdate={
       _id:this.state.activePoll._id,
       options:stateCopy.options,
@@ -89,14 +75,23 @@ class Display extends React.Component{
 
   render(){
     if(this.state.activePoll!=""){
+      let totalVotes = this.state.activePoll.options.reduce(function(acc,curr){
+        return acc+curr[1]
+      },0)
       let voteButtonState= (this.state.hasVoted) ? true : false
       let deleteButtonState = (this.props.user.user.username === this.state.activePoll.created) ? false : true
       let voteButtonDescription = (voteButtonState) ? "User / IP already Voted" : "Vote For " + this.state.selectedOption
+      voteButtonDescription = (voteButtonDescription === "Vote For Choose an Option") ? "Choose an Option" : voteButtonDescription
       let deleteButtonDescription = (deleteButtonState) ? "Must be an owner to Delete Poll" : "Delete Poll"
       return (
         <Grid >
           <Row className="text-center" style={{"marginTop":"25px"}}>
-            <Col xs={12}><Well><h1 style={{'fontFamily':'Oswald'}}>{this.state.activePoll.title}</h1></Well></Col>
+            <Col xs={12}>
+              <Well>
+                <h1 style={{'fontFamily':'Oswald'}}>{this.state.activePoll.title}</h1>
+                <h5 style={{'fontFamily':'Oswald'}}>{totalVotes} Votes Cast</h5>
+              </Well>
+            </Col>
           </Row>
           <Row className="text-center">
             <Col xs={12} md={6}>
@@ -110,7 +105,7 @@ class Display extends React.Component{
                onClick = {this.processVote.bind(this)}
               >{voteButtonDescription} </Button>
             </Col>
-            <Col xs={12} md={6}>
+            <Col className="piearea" xs={12} md={6}>
               <Pie data={this.state.activePoll.options}/>
               <Button block className="btn btn-danger" disabled={deleteButtonState} onClick={()=>this.handelePollDelete()}>{deleteButtonDescription}</Button>
             </Col>

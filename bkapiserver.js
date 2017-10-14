@@ -24,30 +24,23 @@ app.post('/polls', function(req,res){
     res.json(poll)
   })
 })
-
-//Get Polls
-app.get('/polls/:user?', function(req,res){
-  //example /polls/ --> all data
-  // /polls/jdoe --> param = jdoe , use to pull user data
-  // /polls/?singlepoll=xyz , use to pull data only for xyz
-  var query;
-
-  if(req.params.user){
-    query = {created: req.params.user};
-  }
-  else if(req.query.singlepoll){
-    query = {_id: req.query.singlepoll};
-  }
-  else{
-    query ={}
-  }
+//Get all Polls
+app.get('/polls', function(req,res){
+  Polls.find(function(err,poll){
+    if(err){
+      throw err;
+    }
+    res.json(poll)
+  })
+})
+//Get specific Poll
+app.get('/polls/:user', function(req,res){
+  var query = {created: req.params.user};
   Polls.find(query,function(err,poll){
     if(err){
-      res.json (err) ;
+      throw err;
     }
-    //res.redirect('/logout')
     res.json(poll)
-
   })
 })
 //Delete polls

@@ -7,17 +7,6 @@ var TwitterStrategy  = require('passport-twitter').Strategy;
 var User = require('../models/user');
 
 // load the auth variables
-/*
-var configAuth = {
-
-    'twitterAuth' : {
-      'consumerKey'       : 'bhNgWesfvxd6u0sKupmuPWbzp',
-      'consumerSecret'    : 'sI2jnDlCwGKBhQABCciOu3gKXqAsfHvVR4vYDf8jDiBOeWI3wh',
-      'callbackURL'       : 'http://localhost:3000/auth/twitter/callback'
-    }
-//http://localhost:3000/auth/twitter/callback
-}
-*/
 var configAuth = {
 
     'twitterAuth' : {

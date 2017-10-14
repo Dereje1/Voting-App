@@ -22,7 +22,9 @@ import {addPoll} from './actions/pollactions'
 
 
 //store declaration
+//use logger for debugging only
 const middleware = applyMiddleware(thunk,logger)
+//const middleware = applyMiddleware(thunk)
 const store = createStore(reducers,middleware)
 
 

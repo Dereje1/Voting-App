@@ -19,8 +19,12 @@ export function addPoll(pollObject){
   }
 
 export function getPolls(foruser = false){
+  //foruser = false --> get all data
+  //foruser = some string --> get all user data
+  //foruser = false --> get all data
+
   return function(dispatch){
-    let apiPath = foruser ? "api/polls/"+foruser : "api/polls"
+    let apiPath = foruser ? "api/polls/"+foruser : "api/polls/"
     axios.get(apiPath)
       .then(function(response){
         dispatch(

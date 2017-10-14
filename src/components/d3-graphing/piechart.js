@@ -18,22 +18,27 @@ class Pie extends React.Component{
   createPieChart(){
     var data = this.formatData(this.props.data);
     //data = data.map((d)=>{return d.y})
+    let totalVotes = this.props.data.reduce(function(acc,curr){
+      return acc+curr[1]
+    },0)
     const node = this.node
+    const element = document.querySelector(".piearea").getBoundingClientRect();
 
-    var width = 475,
-        height = 475,
-        radius = Math.min(width, height) / 2;
+    let minBound = Math.min(element.width, element.height)
+    var width = minBound*.9,
+        height = minBound*.9,
+        radius = width / 2;
 
     var color = d3.scaleOrdinal()
         .range(["#f4f442", "#7af441", "#41f4e2","#f44141","#f441d0","#f4a041","#d341f4","#f46d41"]);
 
     var arc = d3.arc()
-        .outerRadius(radius - 10)
+        .outerRadius(radius)
         .innerRadius(0);
 
     var labelArc = d3.arc()
-        .outerRadius(radius - 60)
-        .innerRadius(radius - 60);
+        .outerRadius(radius - width*.2)
+        .innerRadius(radius - width*.15);
 
     var pie = d3.pie()
         .sort(null)
@@ -41,7 +46,7 @@ class Pie extends React.Component{
 
     var svg = d3.select(node)
                 .append("g")
-                  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                  .attr("transform", "translate(" + width / 2 + "," + height / 1.9 + ")");
 
       var g = svg.selectAll(".arc")
           .data(pie(data))
@@ -57,13 +62,14 @@ class Pie extends React.Component{
           .attr("dy", ".5em")
           .text(function(d) {
             if(d.data.y!==0){
-              return (d.data.x + "-" + d.data.y)
+              let percentage = ((d.data.y/totalVotes)*100)
+              return (d.data.x + "-\n" + percentage.toFixed(2)+"%")
             }
             else{
               return ("")
             }
           })
-          .style("font-size", "1.2em")
+          .style("font-size", width*.028)
           .style("font-weight", "bold");
   }
   formatData(data){
@@ -78,7 +84,7 @@ class Pie extends React.Component{
   }
   render(){
     return (
-      <svg ref={node => this.node = node} width={500} height={500}>
+      <svg ref={node => this.node = node} width={"100%"} height={500}>
       {/*<rect width={"100%"} height={"100%"} fill="blue"></rect>*/}
       </svg>
     )
