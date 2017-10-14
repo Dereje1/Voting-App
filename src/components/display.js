@@ -40,10 +40,10 @@ class Display extends React.Component{
   }
   processVote(){
 
-    let activePoll = this.props.pollsCombo.polls[0]
+    let stateCopy = {...this.props.pollsCombo.polls[0]}
 
     if(this.checkipVote()){return;}
-    console.log(activePoll)
+    //console.log(activePoll)
 
     let indexOfOption = stateCopy.options.findIndex((option)=>{
       return (this.state.selectedOption===option[0])
@@ -55,7 +55,7 @@ class Display extends React.Component{
     }
     if(this.props.user.user.username){stateCopy.voted.push(this.props.user.user.username)}
     let readyToUpdate={
-      _id:activePoll._id,
+      _id:stateCopy._id,
       options:stateCopy.options,
       voted:stateCopy.voted
     }
@@ -118,6 +118,9 @@ class Display extends React.Component{
             </Row>
           </Grid>
         )
+      }
+      else{
+        return(<div className="text-center">Processing Poll!!</div>)
       }
     }
     else{

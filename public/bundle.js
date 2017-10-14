@@ -59519,12 +59519,12 @@ var Display = function (_React$Component) {
     value: function processVote() {
       var _this2 = this;
 
-      var activePoll = this.props.pollsCombo.polls[0];
+      var stateCopy = _extends({}, this.props.pollsCombo.polls[0]);
 
       if (this.checkipVote()) {
         return;
       }
-      console.log(activePoll);
+      //console.log(activePoll)
 
       var indexOfOption = stateCopy.options.findIndex(function (option) {
         return _this2.state.selectedOption === option[0];
@@ -59540,7 +59540,7 @@ var Display = function (_React$Component) {
         stateCopy.voted.push(this.props.user.user.username);
       }
       var readyToUpdate = {
-        _id: activePoll._id,
+        _id: stateCopy._id,
         options: stateCopy.options,
         voted: stateCopy.voted
       };
@@ -59641,6 +59641,12 @@ var Display = function (_React$Component) {
                 )
               )
             )
+          );
+        } else {
+          return _react2.default.createElement(
+            'div',
+            { className: 'text-center' },
+            'Processing Poll!!'
           );
         }
       } else {
