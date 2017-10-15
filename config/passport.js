@@ -12,7 +12,7 @@ var configAuth = {
     'twitterAuth' : {
       'consumerKey'       : process.env.TWITTER_CONSUMER_KEY,
       'consumerSecret'    : process.env.TWITTER_CONSUMER_SECRET,
-      'callbackURL'       : 'http://localhost:3000/auth/twitter/callback'
+      'callbackURL'       : process.env.TWITTER_CALLBACK
     }
 //http://localhost:3000/auth/twitter/callback
 //https://fcc-voting-app-dereje1.herokuapp.com/auth/twitter/callback
