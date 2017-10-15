@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {Nav, NavItem, Navbar, Button} from 'react-bootstrap';
 
 class Menu extends React.Component{
-
   conditionalNav(){
     if(this.props.user.user.authenticated){//the way response comes of user is in string I can change this to JSON response in the future
       return(
@@ -28,12 +27,12 @@ class Menu extends React.Component{
   }
 
   render(){
-
+    let bcolor = (this.props.user.user.authenticated) ? "yellow" : "white"
     return(
     <Navbar fixedTop>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">Voting App</a>
+            <a href="/" style={{"color":bcolor}}>Voting App</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>

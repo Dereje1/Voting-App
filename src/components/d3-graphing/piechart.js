@@ -15,6 +15,7 @@ class Pie extends React.Component{
   componentDidUpdate() {
      this.createPieChart()
   }
+
   createPieChart(){
     var data = this.formatData(this.props.data);
     //data = data.map((d)=>{return d.y})
@@ -25,8 +26,8 @@ class Pie extends React.Component{
     const element = document.querySelector(".piearea").getBoundingClientRect();
 
     let minBound = Math.min(element.width, element.height)
-    var width = minBound*.9,
-        height = minBound*.9,
+    var width = minBound*.85,
+        height = minBound*.85,
         radius = width / 2;
 
     var color = d3.scaleOrdinal()
@@ -46,16 +47,16 @@ class Pie extends React.Component{
 
     var svg = d3.select(node)
                 .append("g")
-                  .attr("transform", "translate(" + width / 2 + "," + height / 1.9 + ")");
+                  .attr("transform", "translate(" + width / 1.8 + "," + height / 1.9 + ")");
 
-      var g = svg.selectAll(".arc")
-          .data(pie(data))
+    var g = svg.selectAll(".arc")
+        .data(pie(data))
         .enter().append("g")
-          .attr("class", "arc");
+        .attr("class", "arc");
 
       g.append("path")
           .attr("d", arc)
-          .style("fill", function(d) { return color(d.data.x); });
+          .style("fill", function(d) { return color(d.data.x); })
 
       g.append("text")
           .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })

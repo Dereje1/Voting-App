@@ -29,6 +29,7 @@
     "passport-twitter": "latest",
     "react": "^15.4.1",
     "react-bootstrap": "^0.31.3",
+    "react-d3-tooltip": "^1.4.14",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.5",
     "react-router": "^3.0.4",

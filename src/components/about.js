@@ -35,9 +35,9 @@ class About extends React.Component{
           <Modal.Title id="contained-modal-title">Voting App</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5>Coded by <a href="https://www.freecodecamp.com/dereje1" target="_blank">DGetahun</a></h5>
+          <h5 className="text-center">Coded by <a href="https://www.freecodecamp.com/dereje1" target="_blank">DGetahun</a></h5>
           <br></br>
-          <h5>With:</h5>
+          <h5 className="text-center">With</h5>
           <Table responsive>
               <thead>
                 <tr>
@@ -62,7 +62,7 @@ class About extends React.Component{
             </Table>
         </Modal.Body>
         <Modal.Footer>
-          <h6 className="pull-left"><a href="https://github.com/Dereje1/Voting-App" target="_blank">Github</a></h6>
+          <h6 className="text-center">Source @ <a href="https://github.com/Dereje1/Voting-App" target="_blank">Github</a></h6>
           <Button onClick={this.close.bind(this)}>Close</Button>
         </Modal.Footer>
       </Modal>
