@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//dumb component login page via twitter
 import React from 'react'
 import { Button,Grid,Col,Row,Jumbotron} from 'react-bootstrap'
 

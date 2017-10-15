@@ -1,10 +1,13 @@
 "use strict"
+//root of the frontend get /set primary store vars here
 import React from 'react';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
-import {getUser} from './actions/authentication';
-import Home from './components/home';
+
 import Menu from './components/menu'
+//action gets user info on every mount
+import {getUser} from './actions/authentication';
+
 class Main extends React.Component{
   componentDidMount(){
     console.log("CDM Mounted for Main")

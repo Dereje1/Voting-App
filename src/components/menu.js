@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//navigation bar self explanatory
 import React from 'react'
 import {connect} from 'react-redux'
 import {Nav, NavItem, Navbar, Button} from 'react-bootstrap';

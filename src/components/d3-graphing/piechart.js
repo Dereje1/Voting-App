@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//creates the pie chart with d3 , this compinent has lots of room for improvement
 import React from 'react';
 import * as d3 from "d3";
 
@@ -6,7 +6,6 @@ import * as d3 from "d3";
 class Pie extends React.Component{
   constructor(props){
     super(props)
-
     this.createPieChart = this.createPieChart.bind(this)
   }
   componentDidMount() {
@@ -22,7 +21,7 @@ class Pie extends React.Component{
     let totalVotes = this.props.data.reduce(function(acc,curr){
       return acc+curr[1]
     },0)
-    const node = this.node
+    const node = this.node //directly manipulating the dom here --> not very reactive...
     const element = document.querySelector(".piearea").getBoundingClientRect();
 
     let minBound = Math.min(element.width, element.height)
@@ -30,6 +29,7 @@ class Pie extends React.Component{
         height = minBound*.85,
         radius = width / 2;
 
+    // normal d3 commands below.... except could not manage tool tips to work as I used to use another div in the dom(outside of svg)
     var color = d3.scaleOrdinal()
         .range(["#f4f442", "#7af441", "#41f4e2","#f44141","#f441d0","#f4a041","#d341f4","#f46d41"]);
 

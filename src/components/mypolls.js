@@ -1,3 +1,4 @@
+"use strict" //a dumb component just renders the home component with user info
 import React from 'react';
 import Home from './home';
 import {connect} from 'react-redux'

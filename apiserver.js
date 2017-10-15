@@ -3,15 +3,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var app = express();
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //APIs Start
-var db = require('./models/db')
+var db = require('./models/db') //mongoose required schema
 var Polls = require('./models/polls')
 
 //Add New Poll//
@@ -25,7 +23,7 @@ app.post('/polls', function(req,res){
   })
 })
 
-//Get Polls
+//Get all Polls/single poll or user defined polls
 app.get('/polls/:user?', function(req,res){
   //example /polls/ --> all data
   // /polls/jdoe --> param = jdoe , use to pull user data
@@ -45,9 +43,8 @@ app.get('/polls/:user?', function(req,res){
     if(err){
       res.json (err) ;
     }
-    //res.redirect('/logout')
-    res.json(poll)
 
+    res.json(poll)
   })
 })
 //Delete polls
@@ -66,7 +63,7 @@ app.put('/polls/:_id', function(req, res){
    var pollToUpdate = req.body;
    var pollID = req.params._id;
    // if the field doesn't exist $set will set a new field
-   //change to findByIdAndUpdate to make it congruent with delete
+   // change to findByIdAndUpdate to make it congruent with delete
    var update = { '$set': {options: pollToUpdate.options, voted: pollToUpdate.voted}};
    // When true returns the updated document
    var modified = {new: true};
@@ -79,7 +76,6 @@ app.put('/polls/:_id', function(req, res){
 })
 
 //APIs end
-
 app.listen(3001,function(err){
   if(err){
     console.log(err)

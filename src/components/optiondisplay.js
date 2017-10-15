@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//dumb component just populates combo box and sends back current selection
 import React from 'react'
 import {connect} from 'react-redux'
 import {DropdownButton,ButtonToolbar,MenuItem} from 'react-bootstrap'
@@ -12,8 +12,8 @@ class PollOptions extends React.Component{
         <MenuItem key={idx} eventKey={idx}>{o[0]}</MenuItem>
       )
     })
-    if(this.props.user.user.authenticated){
-      optionsList.push(<MenuItem key={optionsList.length} eventKey={optionsList.length}>Add an Option</MenuItem>)
+    if(this.props.user.user.authenticated){//if authenticated add the "add option" selection
+       optionsList.push(<MenuItem key={optionsList.length} eventKey={optionsList.length}>Add an Option</MenuItem>)
     }
     return(
           <DropdownButton bsSize="large" title={this.props.comboSelection} id="dropdown-size-large" onSelect={this.props.onSelect}>

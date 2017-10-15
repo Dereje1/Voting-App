@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//CRUD for poll in the main store state
 export function pollReducer(state={polls:[]},action){
   switch (action.type) {
     case "ADD_POLL":

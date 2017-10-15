@@ -1,4 +1,4 @@
-"use strict"
+"use strict"// all CRUD actions look at apiserver for payload data
 import axios from 'axios';
 
 export function addPoll(pollObject){

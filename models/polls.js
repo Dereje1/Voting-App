@@ -1,4 +1,4 @@
-"use strict"
+"use strict"//schema for a poll
 var mongoose = require('mongoose');
 var pollSchema = mongoose.Schema({
    title: String,

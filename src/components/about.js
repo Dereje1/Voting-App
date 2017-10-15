@@ -1,6 +1,6 @@
-"use strict"
+"use strict"//dumb Component about page
 import React from 'react'
-import { Button,Modal,Table} from 'react-bootstrap'
+import { Button,Modal,Table} from 'react-bootstrap'//not modal shows warnings in console should be fixed with next update
 
 class About extends React.Component{
   constructor(props) {
@@ -37,7 +37,6 @@ class About extends React.Component{
         <Modal.Body>
           <h5 className="text-center">Coded by <a href="https://www.freecodecamp.com/dereje1" target="_blank">DGetahun</a></h5>
           <br></br>
-          <h5 className="text-center">With</h5>
           <Table responsive>
               <thead>
                 <tr>

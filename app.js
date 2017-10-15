@@ -6,7 +6,7 @@ var logger = require('morgan');
 var app = express();
 app.use(logger('dev'));
 
-//becareful of the orders in middleware as they matter
+//becareful of the orders in middleware they matter very much
 
 var httpProxy = require('http-proxy');
 // Set up PROXY server with the module from above
@@ -20,6 +20,7 @@ app.use('/api',function(req,res){
 })
 
 //end proxy setup
+
 
 //authentication requirements
 var mongoose = require('mongoose');
@@ -47,7 +48,7 @@ app.use(bodyParser.json()); // get information from html forms
 // required for passport
 app.use(session(
   { secret: 'jajadaexxjjd23sddseeazzooeessssz',
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),//warning in node if this is not included
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),//warning in node if this option is not included
     resave: true,
     saveUninitialized: true
   }
@@ -59,17 +60,11 @@ app.use(passport.session()); // persistent login sessions
 require('./routes/authenticroutes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 //end authentication
 
-
-
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 // DEFINES THE MAIN ENTRY POINT
 app.get('*', function(req, res){
-
    res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
   });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

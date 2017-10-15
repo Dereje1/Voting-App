@@ -1,14 +1,14 @@
-"use strict"
+"use strict"//component allows creation of new poll for and authenticated user
 import React from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux';
 import {findDOMNode} from 'react-dom';
 import {FormControl, FormGroup, Button, ControlLabel,Grid,Col,Row} from 'react-bootstrap'
 import {getPolls,addPoll} from '../actions/pollactions'
+//login component
 import Login from './login'
 
 class PollForm extends React.Component{
-
     constructor(props){
       super(props)
 
@@ -18,7 +18,7 @@ class PollForm extends React.Component{
       this.props.getPolls()
     }
     handleNewPoll(){
-
+      //handle info from the form
       let pTitle = findDOMNode(this.refs.title).value.trim()
       let pOptions = findDOMNode(this.refs.options).value.split('\n')
       pOptions = pOptions.filter(function(o){
@@ -28,17 +28,17 @@ class PollForm extends React.Component{
       let pOptionsMapped = pOptions.map(function(p){
         return [p,0]
       })
-      if (!pTitle.length || !pOptions.length){return}
+      if (!pTitle.length || !pOptions.length){return}//incase no options and no title
       let pollObject ={}
       pollObject.title = pTitle
       pollObject.options = pOptionsMapped
       pollObject.created = this.props.user.user.username
       pollObject.vote=[]
-      this.props.addPoll(pollObject)
+      this.props.addPoll(pollObject)//add poll in store and mongo
       this.props.router.push('/');
     }
     render(){
-      if(this.props.user.user.authenticated){
+      if(this.props.user.user.authenticated){//renders only if authenticated
         return(
               <Grid>
                 <Row>
