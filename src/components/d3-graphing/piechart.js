@@ -64,7 +64,7 @@ class Pie extends React.Component{
           .text(function(d) {
             if(d.data.y!==0){
               let percentage = ((d.data.y/totalVotes)*100)
-              return (d.data.x + "-\n" + percentage.toFixed(2)+"%")
+              return (d.data.x + "-\n" + percentage.toFixed(0)+"%")
             }
             else{
               return ("")
