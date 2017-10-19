@@ -4,7 +4,7 @@ $a-tags: 'a, a:active, a:hover, a:visited, a:active, a:hover';
 body{
   margin-top:50px;
   td,th{
-    text-align: center;
+    text-align: left;
   }
   #{$a-tags} {
     color: yellow;

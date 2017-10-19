@@ -35,7 +35,7 @@ class About extends React.Component{
           <Modal.Title id="contained-modal-title">Voting App</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5 className="text-center">Coded by <a href="https://www.freecodecamp.com/dereje1" target="_blank">DGetahun</a></h5>
+          <h5>Coded by <a href="https://www.freecodecamp.com/dereje1" target="_blank">DGetahun</a> with JavaScript.</h5>
           <br></br>
           <Table responsive>
               <thead>
@@ -54,14 +54,18 @@ class About extends React.Component{
                   <td>Mongoose / Mongodb</td>
                 </tr>
                 <tr>
-                  <td>Javascript</td>
-                  <td>Javascript</td>
+                  <td>React-Bootstrap</td>
+                  <td>Passport.js</td>
                 </tr>
               </tbody>
             </Table>
+          <h5> Data Sources:</h5>
+          <ul>
+            <li>Poll Sample/Initializer - <a href="https://hackernoon.com/5-best-javascript-frameworks-in-2017-7a63b3870282" target="_blank">5 Best JavaScript Frameworks in 2017</a></li>
+          </ul>
         </Modal.Body>
         <Modal.Footer>
-          <h6 className="text-center">Source @ <a href="https://github.com/Dereje1/Voting-App" target="_blank">Github</a></h6>
+          <h6 className="pull-left">Source Code @ <a href="https://github.com/Dereje1/Voting-App" target="_blank">Github</a></h6>
           <Button onClick={this.close.bind(this)}>Close</Button>
         </Modal.Footer>
       </Modal>

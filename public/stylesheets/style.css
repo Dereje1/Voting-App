@@ -3,7 +3,7 @@ body {
 }
 
 body td, body th {
-  text-align: center;
+  text-align: left;
 }
 
 body a, body a:active, body a:hover, body a:visited, body a:active, body a:hover {
