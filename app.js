@@ -47,7 +47,7 @@ app.use(bodyParser.json()); // get information from html forms
 
 // required for passport
 app.use(session(
-  { secret: 'jajadaexxjjd23sddseeazzooeessssz',
+  { secret: process.env.SESSION_SECRET,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),//warning in node if this option is not included
     resave: true,
     saveUninitialized: true
