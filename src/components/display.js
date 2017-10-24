@@ -16,12 +16,19 @@ class Display extends React.Component{
     this.state={
       selectedOption:"Choose an Option",
       justVoted:false,
-      addOptionField:"hidden"
+      addOptionField:"hidden",
+      fullBound:0
     }
   }
   componentDidMount(){
     //first get info of specific poll from store
     this.props.getPolls("?singlepoll="+this.props.location.query.singlepoll)
+    this.setMinimumWindowWidth();
+  }
+
+  setMinimumWindowWidth(){
+    let minBound = Math.min(window.innerWidth, window.innerHeight)
+    this.setState({fullBound:minBound})
   }
   checkipVote(){//checks if current user/ip has already voted
     let votedAlready;
@@ -141,12 +148,12 @@ class Display extends React.Component{
                  onClick = {this.processVote.bind(this)}
                 >{voteButtonDescription} </Button>
                 <Button block className="btn btn-primary"
-                 style={{"marginTop":"25px"}}
+                 style={{"marginTop":"25px","marginBottom":"25px"}}
                  onClick = {this.tweetPoll.bind(this)}
                 ><span style={{"fontSize":"25px"}} className="fa fa-twitter social"/>  Tweet This Poll</Button>
               </Col>
               <Col className="piearea" xs={12} md={6}>
-                <Pie data={activePoll.options}/>
+                <Pie width={this.state.fullBound} data={activePoll.options}/>
                 <Button block className="btn btn-danger" style={{"fontSize":"25px","visibility":deleteButtonVisibility}} onClick={()=>this.handelePollDelete()}>Delete Poll</Button>
               </Col>
             </Row>

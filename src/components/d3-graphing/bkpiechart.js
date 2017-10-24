@@ -1,48 +1,32 @@
-
-import React from 'react'
-import ReactFauxDOM from 'react-faux-dom'
+"use strict"//creates the pie chart with d3 , this compinent has lots of room for improvement
+import React from 'react';
 import * as d3 from "d3";
 
-class Pie extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tipleft:0,
-      tipTop:0,
-      tipVisible:"hidden",
-      tipText:""
-    }
+
+class Pie extends React.Component{
+  constructor(props){
+    super(props)
+    this.createPieChart = this.createPieChart.bind(this)
   }
-  tooltip(){
-    let toolStyle={
-      "position": "absolute",
-      "color": "white",
-      "padding": "5px",
-      "backgroundColor": "black",
-      "fontSize": "13px",
-      "borderRadius": "3px",
-      "whiteSpace": "pre",
-      "left":this.state.tipleft,
-      "top":this.state.tipTop,
-      "visibility":this.state.tipVisible
-    }
-    return(
-      <div
-        key={1}
-        style={toolStyle}
-      >{this.state.tipText}</div>
-    )
+  componentDidMount() {
+     this.createPieChart()
   }
+  componentDidUpdate() {
+     this.createPieChart()
+  }
+
   createPieChart(){
     var data = this.formatData(this.props.data);
     //data = data.map((d)=>{return d.y})
     let totalVotes = this.props.data.reduce(function(acc,curr){
       return acc+curr[1]
     },0)
+    const node = this.node //directly manipulating the dom here --> not very reactive...
+    const element = document.querySelector(".piearea").getBoundingClientRect();
 
-
-    var width = this.props.width*.6,
-        height = width,
+    let minBound = Math.min(element.width, element.height)
+    var width = minBound*.85,
+        height = minBound*.85,
         radius = width / 2;
 
     // normal d3 commands below.... except could not manage tool tips to work as I used to use another div in the dom(outside of svg)
@@ -61,14 +45,9 @@ class Pie extends React.Component {
         .sort(null)
         .value(function(d) {; return d.y; });
 
-    //Create the element
-    const div = new ReactFauxDOM.Element('div')
-    div.appendChild(this.tooltip())
-    var svg = d3.select(div).append("svg")
-                .attr("width", width)
-                .attr("height", width)
+    var svg = d3.select(node)
                 .append("g")
-                  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                  .attr("transform", "translate(" + width / 1.8 + "," + height / 1.9 + ")");
 
     var g = svg.selectAll(".arc")
         .data(pie(data))
@@ -78,20 +57,6 @@ class Pie extends React.Component {
       g.append("path")
           .attr("d", arc)
           .style("fill", function(d) { return color(d.data.x); })
-          .on('mouseover', (d) => {
-            let pos = d3.mouse(d3.select('.arc').node())
-            this.setState({
-              tipleft:pos[0]+radius,
-              tipTop:pos[1]+radius,
-              tipText:d.data.x + "\n" + d.data.y + " Votes",
-              tipVisible:"visible"
-            })
-            //console.log(d.data.x + "-\n" + d.data.y + " Mouse Position  " ,  d3.event.pageX, d3.event.pageY)
-          })
-          .on('mouseout', (d) => {
-            //console.log("Bye " + d.data.x )
-            this.setState({tipVisible:"hidden"})
-          });
 
       g.append("text")
           .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
@@ -107,7 +72,6 @@ class Pie extends React.Component {
           })
           .style("font-size", width*.028)
           .style("font-weight", "bold");
-    return (div.toReact())
   }
   formatData(data){
     return(
@@ -119,10 +83,13 @@ class Pie extends React.Component {
       })
     )
   }
-  render() {
-    return(this.createPieChart())
+  render(){
+    return (
+      <svg ref={node => this.node = node} width={"100%"} height={500}>
+      {/*<rect width={"100%"} height={"100%"} fill="blue"></rect>*/}
+      </svg>
+    )
   }
-
 
 }
 
